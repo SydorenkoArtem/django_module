@@ -6,11 +6,11 @@ User Application URLs Configuration
 
 from django.urls import path
 
-from user.views import (UserRegistrationForm)
+from user.views import (user_logout, user_login, user_register)
 
 urlpatterns = [
-    # path("login/", UserLoginForm, name="login"),
-    # path("logout/", UserLogoutView.as_view(), name="logout"),
-    path("register/", UserRegistrationForm, name="register"),
+    path("login/", user_login, name="login"),
+    path("logout/", user_logout, name="logout"),
+    path("register/", user_register, name="register"),
     # path("profile/", UserProfileView.as_view(), name="profile"),
 ]

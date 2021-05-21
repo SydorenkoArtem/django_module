@@ -3,7 +3,9 @@ User Application Forms
 ======================
 """
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 class UserRegistrationForm(forms.Form):
@@ -35,4 +37,16 @@ class UserRegistrationForm(forms.Form):
 
 class UserLoginForm(forms.Form):
     username = forms.CharField(max_length=32, help_text="32 characters or fewer")
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)
+
+    user = None
+
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            self.user = user
+            return
+        raise ValidationError("check username and password")
