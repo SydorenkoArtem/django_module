@@ -1,0 +1,21 @@
+# files and folder listed in this file would not be added to the repository
+
+# virtual environment
+/venv/
+/env/
+
+# python cache
+__pycache__
+
+# idea configurations
+/.vscode/
+/.idea/
+
+# local databases
+/pgdata/
+/pgsql/
+*.sqlite3
+
+# temporary files storage
+/temp/
+/tmp/

@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+{% block doctitle %}Register | {{ block.super }}{% endblock %}
+{% block content %}
+ <form method="post">
+ {% csrf_token %}
+     {{ form.as_p }}
+     <button type="submit" class="btn btn-primary">Register</button>>
+ </form>
+    <div>
+    Already have an account? <a href="{% url "login" %}">Login</a>
+    </div>
+{% endblock %}
