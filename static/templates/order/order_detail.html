@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+{% block doctitle %}Order | {{ block.super }}{% endblock %}
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <h5>Order Details</h5>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      Order status: {{ object.status }}
+    </div>
+    <div class="col">
+      Product: {{ object.product }}
+    </div>
+    <div class="col">
+      Quantity: {{ object.quantity }}
+    </div>
+  <div class="col">
+      Price: {{ object.price }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <p>Delivery Address:</p>
+      <p>{{ object.address|linebreaks }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <a href="{% url "list" %}" class="btn btn-primary">Send Order</a>
+      <a href="{% url "order:delete" pk=object.pk %}" class="btn btn-danger">Cancel Order</a>
+    </div>
+  </div>
+{% endblock %}

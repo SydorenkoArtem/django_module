@@ -7,3 +7,14 @@
     {% endfor %}
   </div>
 {% endblock %}
+{% block sidebar %}
+    <div class="col-md-2">
+        <div class="list-group">
+            <a href="{% url "list" %}" class="list-group-item list-group-item-action">All</a>
+            {% for category in categories %}
+            <a href="?category_id={{ category.id }}" class="list-group-item list-group-item-action">
+            {{ category.category }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

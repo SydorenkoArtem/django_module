@@ -6,16 +6,16 @@ Product Application Forms
 
 from django import forms
 
-from product.models import Review
+from product.models import Product
 
 
-class ReviewForm(forms.ModelForm):
+class ProductForm(forms.ModelForm):
     """Review form implementation"""
 
     class Meta:
-        model = Review
-        fields = ["rate", "review"]
+        model = Product
+        fields = ["amount"]
         widgets = {
-            "rate": forms.Select(attrs={"class": "form-select"}),
-            "review": forms.TextInput(attrs={"class": "form-control"})
+            "amount": forms.Select(attrs={"class": "form-select"}),
+            # "review": forms.TextInput(attrs={"class": "form-control"})
         }

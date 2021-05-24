@@ -8,8 +8,8 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 
-from product.forms import ReviewForm
-from product.models import Product, Review
+from product.forms import ProductForm
+from product.models import Product, Review, Category
 
 
 class ProductListView(ListView):
@@ -18,12 +18,18 @@ class ProductListView(ListView):
     model = Product
     template_name = 'product/product_list.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProductListView, self).get_context_data(*args, **kwargs)
+        context["categories"] = Category.objects.all()
+
+        return context
+
 
 class ProductDetailView(DetailView):
     """Product detail view implementation"""
 
     model = Product
-    extra_context = {"form": ReviewForm()}
+    extra_context = {"form": ProductForm()}
     template_name = 'product/product_card.html'
 
 
@@ -32,7 +38,7 @@ class ReviewCreateView(CreateView):
 
     http_method_names = ["post", "head", "options", ]
     model = Review
-    form_class = ReviewForm
+    form_class = ProductForm
 
     def get_success_url(self):
         return reverse_lazy("detail", kwargs={"slug": self.kwargs.get("slug")})

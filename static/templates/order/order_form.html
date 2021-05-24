@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+{% block doctitle %}Order Form | {{ block.super }}{% endblock %}
+{% block content %}
+  <form class="row" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary col-1" value="Create">
+    <a href="{% url "list" %}" class="col-1 btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}

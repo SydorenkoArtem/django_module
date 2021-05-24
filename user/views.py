@@ -1,8 +1,10 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 
 from user.forms import UserRegistrationForm, UserLoginForm
 
@@ -50,3 +52,9 @@ def user_logout(request):
 
     redirect_url = reverse_lazy("list")
     return HttpResponseRedirect(redirect_url)
+
+
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    """"User profile view implementation"""
+
+    template_name = "user/profile.html"
