@@ -3,14 +3,19 @@ Order Application Views
 =======================
 
 """
-from django.contrib import messages
+
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, request
+from django.core.exceptions import ValidationError
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
                                   DeleteView, )
 
-from order.models import Order
+import json
+from order.forms import OrderForm
+from order.models import Order, OrderCart, OrderItem
+from product.models import Product
 
 
 class OrderListView(LoginRequiredMixin, ListView):
@@ -29,23 +34,40 @@ class OrderListView(LoginRequiredMixin, ListView):
 class OrderDetailView(LoginRequiredMixin, DetailView):
     """Order card detail view implementation"""
 
-    http_method_names = ["head", "options", "get"]
+    http_method_names = ["head", "options", "get", "post"]
     model = Order
 
     def get(self, *args, **kwargs):
         order = self.get_object()
+        quantity = Product.objects.get(product=order.product).amount
         if order.customer != self.request.user:
+            quantity = quantity - int(order.quantity)
+            quantity.save()
             redirect_url = reverse_lazy("order:list")
             return HttpResponseRedirect(redirect_url)
 
         return super(OrderDetailView, self).get(*args, **kwargs)
 
+    def post(self, *args, **kwargs):
+        order = self.get_object()
+        quantity = Product.objects.get(product=order.product).amount
+        if order.status < Order.CONFIRMED:
+            amount = quantity - int(order.quantity)
+            amount.save()
+            return super(OrderDetailView, self).post(*args, **kwargs)
+
+        redirect_url = order.get_absolute_url()
+        return HttpResponseRedirect(redirect_url)
+
 
 class OrderCreateView(LoginRequiredMixin, CreateView):
     """Order card create view implementation"""
 
-    model = Order
-    fields = ["product", "quantity", "address"]
+    form_class = OrderForm
+    template_name = "order/order_form.html"
+
+    # def get(self, *args, **kwargs):
+    #     form = self.form_class(customer=self.request.user)
 
     def form_valid(self, form):
         form.instance.customer = self.request.user
@@ -103,3 +125,44 @@ class OrderDeleteView(LoginRequiredMixin, DeleteView):
             redirect_url = order.get_absolute_url()
 
         return HttpResponseRedirect(redirect_url)
+
+
+def cart(request):
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = OrderCart.objects.get_or_create(customer=customer)
+        items = order.orderitem_set.all()
+    else:
+        items = []
+        order = {"get_cart_items": 0, "get_cart_total": 0}
+    context = {"items": items, "order": order}
+    return render(request, 'order/cart.html', context)
+
+
+def updateItem(request):
+    data = json.loads(request.body)
+    productId = data['fid']
+    action = data['action']
+    print('Action:', action)
+    print('fid:', productId)
+
+    customer = request.user
+    product = Product.objects.get(fid=productId)
+    orderCart, created = OrderCart.objects.get_or_create(customer=customer, complete=False)
+
+    orderItem, created = OrderItem.objects.get_or_create(order=orderCart, product=product)
+
+    if action == 'add':
+        if orderItem.quantity >= product.amount:
+            raise ValidationError(f"This quantity is not in stock {product.amount}")
+        else:
+            orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+
+    orderItem.save()
+
+    if orderItem.quantity <= 0:
+        orderItem.delete()
+
+    return JsonResponse('Item was added', safe=False)

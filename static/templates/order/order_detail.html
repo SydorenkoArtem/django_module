@@ -1,6 +1,9 @@
 {% extends "index.html" %}
 {% block doctitle %}Order | {{ block.super }}{% endblock %}
 {% block content %}
+    <form method="post">
+ {% csrf_token %}
+     {{ form.as_p }}
   <div class="row">
     <div class="col">
       <h5>Order Details</h5>
@@ -17,7 +20,7 @@
       Quantity: {{ object.quantity }}
     </div>
   <div class="col">
-      Price: {{ object.price }}
+      Total: {{ object.total_price }}
     </div>
   </div>
   <div class="row">
@@ -32,4 +35,5 @@
       <a href="{% url "order:delete" pk=object.pk %}" class="btn btn-danger">Cancel Order</a>
     </div>
   </div>
+    </form>
 {% endblock %}

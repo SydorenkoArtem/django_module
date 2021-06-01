@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -39,6 +40,7 @@ def user_login(request):
         if form.is_valid():
             login(request, form.user)
             redirect_url = reverse_lazy("list")
+            messages.add_message(request, messages.SUCCESS, "Login successfully")
             return HttpResponseRedirect(redirect_url)
     else:
         form = UserLoginForm()
@@ -51,6 +53,7 @@ def user_logout(request):
         logout(request)
 
     redirect_url = reverse_lazy("list")
+    messages.warning(request, "You are Logout")
     return HttpResponseRedirect(redirect_url)
 
 

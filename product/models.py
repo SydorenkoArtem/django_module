@@ -34,7 +34,7 @@ class Product(models.Model):
     product = models.CharField(max_length=255)
     description = models.TextField()
     slug = models.SlugField(max_length=255, blank=True, unique=True, verbose_name="product slug")
-    pic = models.ImageField(upload_to="static/templates/images/product")
+    pic = models.ImageField(upload_to="static/images/product")
     amount = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
