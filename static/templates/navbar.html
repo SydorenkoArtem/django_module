@@ -21,7 +21,8 @@
             {% else %}
           {% endif %}
             {% load static %}
-            <a href="{% url 'order:cart' %}"><img id="cart-icon" src="{% static 'images/cart_color.png' %}" alt="Cart" width="30"></a>
+            <a href="{% url 'order:cart' %}"><img id="cart-icon" src="{% static 'images/cart_color.png' %}" alt="Cart" width="40"></a>
+            <p id="cart-total">{{ order.get_cart_items }}</p>
             <a href="{% url "profile" %}" class="nav-link">{{ request.user.username }}</a>
             <a href="{% url "logout" %}" class="nav-link">Logout</a>
         {% else %}

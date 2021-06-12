@@ -6,7 +6,7 @@ Order Application Admin
 
 from django.contrib import admin
 
-from order.models import Order, OrderCart, OrderItem
+from order.models import Order, OrderCart, OrderItem, Purchase
 
 
 def get_product_quantity(order):
@@ -48,3 +48,4 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(OrderCart)
 admin.site.register(OrderItem)
+admin.site.register(Purchase)

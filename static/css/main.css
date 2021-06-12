@@ -21,7 +21,7 @@
     cursor: pointer;
     display: block;
     margin-top: 5px;
-    transition: .1s;
+    transition: .0s;
 }
 
 .quantity{
@@ -30,4 +30,20 @@
 	padding-right:10px;
 
 
+}
+#cart-total{
+	display: block;
+	text-align: center;
+	color:#fff;
+	background-color: red;
+	width: 50px;
+	height: 25px;
+	border-radius: 50%;
+	font-size: 14px;
+}
+
+.cart-icon{
+	width:30px;
+	display: inline-block;
+	margin-left: 15px;
 }

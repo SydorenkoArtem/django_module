@@ -107,3 +107,59 @@ class OrderItem(models.Model):
     def get_total(self):
         total = self.product.price * self.quantity
         return total
+
+
+class Purchase(models.Model):
+    """Purchase model implementation"""
+
+    class Meta:
+        db_table = "purchase"
+        verbose_name = ("purchase")
+        verbose_name_plural = ("purchases")
+
+    cart = models.OneToOneField(
+        OrderCart,
+        on_delete=models.CASCADE,
+        related_name="purchase",
+        verbose_name=("shopping cart"),
+    )
+
+    purchased_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=("purchased datetime"),
+    )
+
+    shipping_address = models.TextField()
+
+    def __repr__(self):
+        """Return a string representation of an instance"""
+
+        return f"<Purchase ({self})>"
+
+    def __str__(self):
+        """Return a string version of an instance"""
+
+        return f"{self.purchased_at}"
+
+    @property
+    def customer(self):
+        """Return a customer instance"""
+
+        return self.cart.customer
+
+    def get_absolute_url(self):
+        return reverse_lazy("purchase:detail", kwargs={"pk": self.pk})
+
+    def get_total(self):
+        """Return a total price of an instance"""
+
+        return self.cart.get_cart_total()
+
+    def save(self, *args, **kwargs):
+        self.cart.complete = True
+        self.cart.save()
+
+        self.cart.customer.cash.amount -= self.get_total()
+        self.cart.customer.cash.save()
+
+        super(Purchase, self).save(*args, **kwargs)
