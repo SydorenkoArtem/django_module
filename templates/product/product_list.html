@@ -9,7 +9,6 @@
     <img src="{{ product.pic.url }}" class="card-img-top" alt="{{ product.slug }}">
     <div class="card-body">
       <h5 class="card-title">{{ product }}</h5>
-      <span>{{ product.rate|default_if_none:"unrated" }}</span>
       <p class="text-end">{{ product.price|floatformat:"2" }} UAH</p>
       <p class="card-text">{{ product.description|truncatewords:"300" }}</p>
       {% if product.amount == 0 %}

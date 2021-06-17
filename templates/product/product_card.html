@@ -1,11 +1,13 @@
-  <div class="row row-cols-1 row-cols-md-3 g-4">
+ {% extends "index.html" %}
+{% block doctitle %}Product | {{ block.super }}{% endblock %}
+{% block content %}
+  <div class="row row-cols-1 row-cols-md-1 g-3">
 <div class="col">
   <div class="card h-100">
   {% load static %}
     <img src="{{ product.pic.url }}" class="card-img-top" alt="{{ product.slug }}">
     <div class="card-body">
       <h5 class="card-title">{{ product }}</h5>
-      <span>{{ product.rate|default_if_none:"unrated" }}</span>
       <p class="text-end">{{ product.price|floatformat:"2" }} UAH</p>
       <p class="card-text">{{ product.description|truncatewords:"300" }}</p>
       {% if product.amount == 0 %}
@@ -19,7 +21,7 @@
       </div>
       <div class="box-element">
           {% if request.user.is_authenticated %}
-{#              <a href="{% url "order:cart" %}" class="btn btn-outline-secondary add-btn">Add to Cart</a>#}
+              <a href="{% url "order:cart" %}" class="btn btn-outline-secondary add-btn">Add to Cart</a>
           <a href="{% url "order:create"  %}" class="btn btn-outline-success">Buy</a>
               <a href="{% url "list" %}" class="btn btn-outline-dark">Back to products</a>
               {% else %}
@@ -30,3 +32,4 @@
   </div>
 </div>
 </div>
+{% endblock %}

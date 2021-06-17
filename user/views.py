@@ -17,7 +17,7 @@ class UserSignUpView(CreateView):
 
     form_class = UserSignUpForm
     template_name = "user/register.html"
-    success_url = reverse_lazy("user:login")
+    success_url = reverse_lazy("login")
 
 
 class UserSignInView(LoginView):
@@ -30,5 +30,5 @@ class UserSignInView(LoginView):
 class UserLogoutView(LogoutView):
     """User logout view implementation"""
 
-    success_url = reverse_lazy("list")
+    pass
 

@@ -17,5 +17,4 @@ class ProductForm(forms.ModelForm):
         fields = ["amount"]
         widgets = {
             "amount": forms.Select(attrs={"class": "form-select"}),
-            # "review": forms.TextInput(attrs={"class": "form-control"})
         }

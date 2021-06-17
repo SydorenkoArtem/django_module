@@ -114,19 +114,18 @@ class Purchase(models.Model):
 
     class Meta:
         db_table = "purchase"
-        verbose_name = ("purchase")
-        verbose_name_plural = ("purchases")
+        verbose_name = 'purchase'
+        verbose_name_plural = "purchases"
 
     cart = models.OneToOneField(
         OrderCart,
         on_delete=models.CASCADE,
-        related_name="purchase",
-        verbose_name=("shopping cart"),
+        related_name='purchase',
     )
 
     purchased_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=("purchased datetime"),
+        verbose_name="purchased datetime",
     )
 
     shipping_address = models.TextField()
